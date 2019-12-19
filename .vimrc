@@ -67,10 +67,12 @@ set laststatus=2
 
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
-"let g:dracula_italic = 0
+let g:dracula_italic = 0
 set t_Co=256
 syntax on
-" color dracula
+color dracula
+hi Normal ctermbg=234
+
 "set termguicolors
 "
 set number
@@ -91,10 +93,18 @@ if has("clipboard")
   endif
 endif
 
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
+
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 nnoremap <silent> <C-y> :w <CR> :!clear && python3 % <CR>
-nnoremap <silent> <C-g> :w <CR> :!clear && printf '\e[3J' &&gcc % -o %< -lncurses && ./%< <CR>
-nnoremap <silent> <C-p> :w <CR> :!clear && g++ % -o %< && ./%< <CR>
+nnoremap <silent> <C-g> :w <CR> :!clear && printf '\e[3J' && gcc -I/usr/local/include/SDL2 -L/usr/local/lib % -o %<.out -lncurses -lSDL2 -lSDL2_image && ./%<.out <CR>
+nnoremap <silent> <C-p> :w <CR> :!clear && g++ % -o %<.out -lsfml-system -lsfml-window -lsfml-graphics && ./%<.out <CR>
 
 map <C-o> :NERDTreeToggle<CR>
 
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+noremap <Leader>Y "+y
+noremap <Leader>P "+p

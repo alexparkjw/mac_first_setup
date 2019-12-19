@@ -21,7 +21,7 @@
 
 #   Change Prompt
 #   ------------------------------------------------------------
-    export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
+    export PS1="\[\033[33;1m\]\u\[\033[32m\]@\[\033[31;1m\]\h:\[\033[36;1m\]\w\[\033[32m\]$\[\033[m\] "
 
 #   Set Paths
 #   ------------------------------------------------------------
@@ -50,9 +50,9 @@
 #   2. MAKE TERMINAL BETTER
 #   -----------------------------
 
-#alias vi=/usr/local/bin/vi
+alias vi=/usr/local/bin/vi
 alias vim=/usr/local/bin/vim
-alias cc=/usr/local/bin/gcc-8
+# alias cc=/usr/local/bin/gcc-8
 alias home='cd ~'
 alias a='./a.out'
 alias gcc='gcc -Wall'
@@ -156,6 +156,7 @@ EOT
 #   4. SEARCHING
 #   ---------------------------
 
+alias dir="/bin/sh ~/Documents/sh/dir.sh"
 alias qfind="find . -name "                 # qfind:    Quickly search for file
 ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
 ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
@@ -261,12 +262,12 @@ alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rul
 #   8. WEB DEVELOPMENT
 #   ---------------------------------------
 
-alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
-alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
-alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
-alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
-alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
+    alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
+    alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
+    alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
+    alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
+    alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
+    httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
 
 #   httpDebug:  Download a web page and show info on what took time
 #   -------------------------------------------------------------------
@@ -302,6 +303,9 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 #   e.g.: hdiutil create -size 10m 10MB.dmg
 #   the above create files that are almost all zeros - if random bytes are desired
 #   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.da
+
+
+
 
 # Setting PATH for Python 3.7
 # The original version is saved in .bash_profile.pysave
