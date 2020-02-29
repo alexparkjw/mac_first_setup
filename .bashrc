@@ -14,6 +14,9 @@
 #  9.  Reminders & Notes
 #
 #  ---------------------------------------------------------------------------
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 #   -------------------------------
 #   1. ENVIRONMENT CONFIGURATION
@@ -21,47 +24,50 @@
 
 #   Change Prompt
 #   ------------------------------------------------------------
-    export PS1="\[\033[33;1m\]\u\[\033[32m\]@\[\033[31;1m\]\h:\[\033[36;1m\]\w\[\033[32m\]$\[\033[m\] "
+export PS1="\[\033[33;1m\]\u\[\033[32m\]@\[\033[31;1m\]\h:\[\033[36;1m\]\w\[\033[32m\]$\[\033[m\] "
+T=$PS1
+H="> "
+
 
 #   Set Paths
 #   ------------------------------------------------------------
-    export PATH="$PATH:/usr/local/bin/"
-    export PATH="/usr/local/git/bin:/sw/bin/:/usr/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+export PATH="$PATH:/usr/bin:/usr/local:/usr/local/bin/:/usr/local/sbin:"
+export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/git/bin:/usr/local/mysql/bin:$PATH"
 
 #   Set Default Editor (change 'Nano' to the editor of your choice)
 #   ------------------------------------------------------------
-    # export EDITOR=/usr/bin/vi
-    export EDITOR=/usr/local/bin/vi
+# export EDITOR=/usr/bin/vi
+export EDITOR=/usr/local/bin/vim
 
 #   Set default blocksize for ls, df, du
 #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
 #   ------------------------------------------------------------
-    export BLOCKSIZE=1k
+export BLOCKSIZE=1k
 
 #   Add color to terminal
 #   (this is all commented out as I use Mac Terminal Profiles)
 #   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
 #   ------------------------------------------------------------
-   export CLICOLOR=1
-   export LSCOLORS=ExFxBxDxCxegedabagacad
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
 
 
 #   -----------------------------
 #   2. MAKE TERMINAL BETTER
 #   -----------------------------
 
-alias vi=/usr/local/bin/vi
-alias vim=/usr/local/bin/vim
-# alias cc=/usr/local/bin/gcc-8
-alias rm='trash'
+# alias rm='trash'
+alias hide='PS1=$H'
+alias show='PS1=$T'
 alias home='cd ~'
 alias a='./a.out'
-alias gcc='gcc -Wall'
+alias cc='clang -ggdb3 -O0 -std=c99 -Wall -Werror'
 alias py='python3'
 alias cp='cp -iv'                           # Preferred 'cp' implementation
 alias mv='mv -iv'                           # Preferred 'mv' implementation
 alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
+alias la='ls -al'                       # Preferred 'ls' implementation
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 #cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
 alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
@@ -94,13 +100,13 @@ alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\
 #   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
 #           displays paginated result with colored search terms and two lines surrounding each hit.            Example: mans mplayer codec
 #   --------------------------------------------------------------------
-    mans () {
-        man $1 | grep -iC2 --color=always $2 | less
-    }
+mans () {
+    man $1 | grep -iC2 --color=always $2 | less
+}
 
 #   showa: to remind yourself of an alias (given some part of it)
 #   ------------------------------------------------------------
-    showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
+showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
 
 
 #   -------------------------------
@@ -115,27 +121,27 @@ alias make10mb='mkfile 10m ./10MB.dat'      # make10mb:     Creates a file of 10
 
 #   cdf:  'Cd's to frontmost window of MacOS Finder
 #   ------------------------------------------------------
-    cdf () {
-        currFolderPath=$( /usr/bin/osascript <<EOT
+cdf () {
+    currFolderPath=$( /usr/bin/osascript <<EOT
             tell application "Finder"
                 try
             set currFolder to (folder of the front window as alias)
                 on error
             set currFolder to (path to desktop folder as alias)
-                end try
+        end try
                 POSIX path of currFolder
             end tell
 EOT
-        )
-        echo "cd to \"$currFolderPath\""
-        cd "$currFolderPath"
-    }
+)
+echo "cd to \"$currFolderPath\""
+cd "$currFolderPath"
+}
 
 #   extract:  Extract most know archives with one command
 #   ---------------------------------------------------------
-    extract () {
-        if [ -f $1 ] ; then
-          case $1 in
+extract () {
+    if [ -f $1 ] ; then
+        case $1 in
             *.tar.bz2)   tar xjf $1     ;;
             *.tar.gz)    tar xzf $1     ;;
             *.bz2)       bunzip2 $1     ;;
@@ -148,11 +154,11 @@ EOT
             *.Z)         uncompress $1  ;;
             *.7z)        7z x $1        ;;
             *)     echo "'$1' cannot be extracted via extract()" ;;
-             esac
-         else
-             echo "'$1' is not a valid file"
-         fi
-    }
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
 
 
 #   ---------------------------
@@ -167,7 +173,7 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name end
 
 #   spotlight: Search for a file using MacOS Spotlight's metadata
 #   -----------------------------------------------------------
-    spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
+spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
 
 
 #   ---------------------------
@@ -180,31 +186,31 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name end
 #       E.g. findPid '/d$/' finds pids of all processes with names ending in 'd'
 #       Without the 'sudo' it will only find processes of the current user
 #   -----------------------------------------------------
-    findPid () { lsof -t -c "$@" ; }
+findPid () { lsof -t -c "$@" ; }
 
 #   memHogsTop, memHogsPs:  Find memory hogs
 #   -----------------------------------------------------
-    alias memHogsTop='top -l 1 -o rsize | head -20'
-    alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
+alias memHogsTop='top -l 1 -o rsize | head -20'
+alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
 
 #   cpuHogs:  Find CPU hogs
 #   -----------------------------------------------------
-    alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
+alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
 
 #   topForever:  Continual 'top' listing (every 10 seconds)
 #   -----------------------------------------------------
-    alias topForever='top -l 9999999 -s 10 -o cpu'
+alias topForever='top -l 9999999 -s 10 -o cpu'
 
 #   ttop:  Recommended 'top' invocation to minimize resources
 #   ------------------------------------------------------------
 #       Taken from this macosxhints article
 #       http://www.macosxhints.com/article.php?story=20060816123853639
 #   ------------------------------------------------------------
-    alias ttop="top -R -F -s 10 -o rsize"
+alias ttop="top -R -F -s 10 -o rsize"
 
 #   my_ps: List processes owned by my user:
 #   ------------------------------------------------------------
-    my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
 
 
 #   ---------------------------
@@ -224,57 +230,57 @@ alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rul
 
 #   ii:  display useful host related informaton
 #   -------------------------------------------------------------------
-    ii() {
-        echo -e "\nYou are logged on ${RED}$HOST"
-        echo -e "\nAdditionnal information:$NC " ; uname -a
-        echo -e "\n${RED}Users logged on:$NC " ; w -h
-        echo -e "\n${RED}Current date :$NC " ; date
-        echo -e "\n${RED}Machine stats :$NC " ; uptime
-        echo -e "\n${RED}Current network location :$NC " ; scselect
-        echo -e "\n${RED}Public facing IP Address :$NC " ;myip
-        #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
-        echo
-    }
+ii() {
+    echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nAdditionnal information:$NC " ; uname -a
+    echo -e "\n${RED}Users logged on:$NC " ; w -h
+    echo -e "\n${RED}Current date :$NC " ; date
+    echo -e "\n${RED}Machine stats :$NC " ; uptime
+    echo -e "\n${RED}Current network location :$NC " ; scselect
+    echo -e "\n${RED}Public facing IP Address :$NC " ;myip
+    #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+    echo
+}
 
 
 #   ---------------------------------------
 #   7. SYSTEMS OPERATIONS & INFORMATION
 #   ---------------------------------------
 
-    alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
+alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
 
 #   cleanupDS:  Recursively delete .DS_Store files
 #   -------------------------------------------------------------------
-    alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
 
 #   finderShowHidden:   Show hidden files in Finder
 #   finderHideHidden:   Hide hidden files in Finder
 #   -------------------------------------------------------------------
-    alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
-    alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
+alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
+alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
 
 #   cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
 #   -----------------------------------------------------------------------------------
-    alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
 #    screensaverDesktop: Run a screensaver on the Desktop
 #   -----------------------------------------------------------------------------------
-    alias screensaverDesktop='/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background'
+alias screensaverDesktop='/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background'
 
 #   ---------------------------------------
 #   8. WEB DEVELOPMENT
 #   ---------------------------------------
 
-    alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
-    alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
-    alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
-    alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
-    alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-    httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
+alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
+alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
+alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
+alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
+alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
+httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
 
 #   httpDebug:  Download a web page and show info on what took time
 #   -------------------------------------------------------------------
-    httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
+httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
 
 #   ---------------------------------------
@@ -341,8 +347,10 @@ unset __conda_setup
 
 export PATH=$PATH:/Users/jw/.sdkman/candidates/kotlin/current/bin/
 function ktc() {
-  echo Compiling, please wait...
-  kotlinc $1 -include-runtime -d ${1%.*}.jar
-  java -jar ${1%.*}.jar
+    echo Compiling, please wait...
+    kotlinc $1 -include-runtime -d ${1%.*}.jar
+    java -jar ${1%.*}.jar
 }
+
+complete -d cd
 
